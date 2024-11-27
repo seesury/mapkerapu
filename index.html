@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/Daratan_0.js"></script>
+        <script src="data/Lautan_1.js"></script>
+        <script src="data/IkanKerapu2018_2.js"></script>
+        <script src="data/IkanKerapu2020_3.js"></script>
+        <script src="data/IkanKerapu2021_4.js"></script>
+        <script src="data/IkanKerapu2022_5.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:false, maxZoom:28, minZoom:1
+        }).fitBounds([[-7.685633484162916,106.20367647058829],[-3.4856334841628707,114.51815610859744]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        // remove popup's row if "visible-with-data"
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        // add class to format popup if it contains media
+		function addClassToPopupIfMedia(content, popup) {
+			var tempDiv = document.createElement('div');
+			tempDiv.innerHTML = content;
+			if (tempDiv.querySelector('td img')) {
+				popup._contentNode.classList.add('media');
+					// Delay to force the redraw
+					setTimeout(function() {
+						popup.update();
+					}, 10);
+			} else {
+				popup._contentNode.classList.remove('media');
+			}
+		}
+        var zoomControl = L.control.zoom({
+            position: 'topleft'
+        }).addTo(map);
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        function pop_Daratan_0(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Raster'] !== null ? autolinker.link(feature.properties['Raster'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_Daratan_0_0() {
+            return {
+                pane: 'pane_Daratan_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(16,157,16,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Daratan_0');
+        map.getPane('pane_Daratan_0').style.zIndex = 400;
+        map.getPane('pane_Daratan_0').style['mix-blend-mode'] = 'normal';
+        var layer_Daratan_0 = new L.geoJson(json_Daratan_0, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Daratan_0',
+            layerName: 'layer_Daratan_0',
+            pane: 'pane_Daratan_0',
+            onEachFeature: pop_Daratan_0,
+            style: style_Daratan_0_0,
+        });
+        bounds_group.addLayer(layer_Daratan_0);
+        map.addLayer(layer_Daratan_0);
+        function pop_Lautan_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">FID_Admin0</th>\
+                        <td class="visible-with-data" id="FID_Admin0">' + (feature.properties['FID_Admin0'] !== null ? autolinker.link(feature.properties['FID_Admin0'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Raster</th>\
+                        <td class="visible-with-data" id="Raster">' + (feature.properties['Raster'] !== null ? autolinker.link(feature.properties['Raster'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FID_Ocean</th>\
+                        <td class="visible-with-data" id="FID_Ocean">' + (feature.properties['FID_Ocean'] !== null ? autolinker.link(feature.properties['FID_Ocean'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Id</th>\
+                        <td class="visible-with-data" id="Id">' + (feature.properties['Id'] !== null ? autolinker.link(feature.properties['Id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_Lautan_1_0() {
+            return {
+                pane: 'pane_Lautan_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(158,207,229,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Lautan_1');
+        map.getPane('pane_Lautan_1').style.zIndex = 401;
+        map.getPane('pane_Lautan_1').style['mix-blend-mode'] = 'normal';
+        var layer_Lautan_1 = new L.geoJson(json_Lautan_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Lautan_1',
+            layerName: 'layer_Lautan_1',
+            pane: 'pane_Lautan_1',
+            onEachFeature: pop_Lautan_1,
+            style: style_Lautan_1_0,
+        });
+        bounds_group.addLayer(layer_Lautan_1);
+        map.addLayer(layer_Lautan_1);
+        function pop_IkanKerapu2018_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Nama Ikan</th>\
+                        <td class="visible-with-data" id="Nama Ikan">' + (feature.properties['Nama Ikan'] !== null ? autolinker.link(feature.properties['Nama Ikan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Berat Ikan  (kg)</th>\
+                        <td class="visible-with-data" id="Berat Ikan  (kg)">' + (feature.properties['Berat Ikan  (kg)'] !== null ? autolinker.link(feature.properties['Berat Ikan  (kg)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tanggal Tangkap</th>\
+                        <td class="visible-with-data" id="Tanggal Tangkap">' + (feature.properties['Tanggal Tangkap'] !== null ? autolinker.link(feature.properties['Tanggal Tangkap'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lintang</th>\
+                        <td class="visible-with-data" id="Lintang">' + (feature.properties['Lintang'] !== null ? autolinker.link(feature.properties['Lintang'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Bujur</th>\
+                        <td class="visible-with-data" id="Bujur">' + (feature.properties['Bujur'] !== null ? autolinker.link(feature.properties['Bujur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_IkanKerapu2018_2_0() {
+            return {
+                pane: 'pane_IkanKerapu2018_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/IkanKerapu2018_2.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_IkanKerapu2018_2');
+        map.getPane('pane_IkanKerapu2018_2').style.zIndex = 402;
+        map.getPane('pane_IkanKerapu2018_2').style['mix-blend-mode'] = 'normal';
+        var layer_IkanKerapu2018_2 = new L.geoJson(json_IkanKerapu2018_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_IkanKerapu2018_2',
+            layerName: 'layer_IkanKerapu2018_2',
+            pane: 'pane_IkanKerapu2018_2',
+            onEachFeature: pop_IkanKerapu2018_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_IkanKerapu2018_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_IkanKerapu2018_2);
+        map.addLayer(layer_IkanKerapu2018_2);
+        function pop_IkanKerapu2020_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Nama Ikan</th>\
+                        <td class="visible-with-data" id="Nama Ikan">' + (feature.properties['Nama Ikan'] !== null ? autolinker.link(feature.properties['Nama Ikan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Berat Ikan (kg)</th>\
+                        <td class="visible-with-data" id="Berat Ikan (kg)">' + (feature.properties['Berat Ikan (kg)'] !== null ? autolinker.link(feature.properties['Berat Ikan (kg)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tanggal Tangkap</th>\
+                        <td class="visible-with-data" id="Tanggal Tangkap">' + (feature.properties['Tanggal Tangkap'] !== null ? autolinker.link(feature.properties['Tanggal Tangkap'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lintang</th>\
+                        <td class="visible-with-data" id="Lintang">' + (feature.properties['Lintang'] !== null ? autolinker.link(feature.properties['Lintang'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Bujur</th>\
+                        <td class="visible-with-data" id="Bujur">' + (feature.properties['Bujur'] !== null ? autolinker.link(feature.properties['Bujur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_6</th>\
+                        <td class="visible-with-data" id="field_6">' + (feature.properties['field_6'] !== null ? autolinker.link(feature.properties['field_6'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_7</th>\
+                        <td class="visible-with-data" id="field_7">' + (feature.properties['field_7'] !== null ? autolinker.link(feature.properties['field_7'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_8</th>\
+                        <td class="visible-with-data" id="field_8">' + (feature.properties['field_8'] !== null ? autolinker.link(feature.properties['field_8'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_9</th>\
+                        <td class="visible-with-data" id="field_9">' + (feature.properties['field_9'] !== null ? autolinker.link(feature.properties['field_9'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_10</th>\
+                        <td class="visible-with-data" id="field_10">' + (feature.properties['field_10'] !== null ? autolinker.link(feature.properties['field_10'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_11</th>\
+                        <td class="visible-with-data" id="field_11">' + (feature.properties['field_11'] !== null ? autolinker.link(feature.properties['field_11'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_12</th>\
+                        <td class="visible-with-data" id="field_12">' + (feature.properties['field_12'] !== null ? autolinker.link(feature.properties['field_12'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_13</th>\
+                        <td class="visible-with-data" id="field_13">' + (feature.properties['field_13'] !== null ? autolinker.link(feature.properties['field_13'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_14</th>\
+                        <td class="visible-with-data" id="field_14">' + (feature.properties['field_14'] !== null ? autolinker.link(feature.properties['field_14'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_15</th>\
+                        <td class="visible-with-data" id="field_15">' + (feature.properties['field_15'] !== null ? autolinker.link(feature.properties['field_15'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_16</th>\
+                        <td class="visible-with-data" id="field_16">' + (feature.properties['field_16'] !== null ? autolinker.link(feature.properties['field_16'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_17</th>\
+                        <td class="visible-with-data" id="field_17">' + (feature.properties['field_17'] !== null ? autolinker.link(feature.properties['field_17'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_18</th>\
+                        <td class="visible-with-data" id="field_18">' + (feature.properties['field_18'] !== null ? autolinker.link(feature.properties['field_18'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_19</th>\
+                        <td class="visible-with-data" id="field_19">' + (feature.properties['field_19'] !== null ? autolinker.link(feature.properties['field_19'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_20</th>\
+                        <td class="visible-with-data" id="field_20">' + (feature.properties['field_20'] !== null ? autolinker.link(feature.properties['field_20'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_21</th>\
+                        <td class="visible-with-data" id="field_21">' + (feature.properties['field_21'] !== null ? autolinker.link(feature.properties['field_21'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_22</th>\
+                        <td class="visible-with-data" id="field_22">' + (feature.properties['field_22'] !== null ? autolinker.link(feature.properties['field_22'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_23</th>\
+                        <td class="visible-with-data" id="field_23">' + (feature.properties['field_23'] !== null ? autolinker.link(feature.properties['field_23'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_24</th>\
+                        <td class="visible-with-data" id="field_24">' + (feature.properties['field_24'] !== null ? autolinker.link(feature.properties['field_24'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_25</th>\
+                        <td class="visible-with-data" id="field_25">' + (feature.properties['field_25'] !== null ? autolinker.link(feature.properties['field_25'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_IkanKerapu2020_3_0() {
+            return {
+                pane: 'pane_IkanKerapu2020_3',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/IkanKerapu2020_3.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_IkanKerapu2020_3');
+        map.getPane('pane_IkanKerapu2020_3').style.zIndex = 403;
+        map.getPane('pane_IkanKerapu2020_3').style['mix-blend-mode'] = 'normal';
+        var layer_IkanKerapu2020_3 = new L.geoJson(json_IkanKerapu2020_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_IkanKerapu2020_3',
+            layerName: 'layer_IkanKerapu2020_3',
+            pane: 'pane_IkanKerapu2020_3',
+            onEachFeature: pop_IkanKerapu2020_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_IkanKerapu2020_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_IkanKerapu2020_3);
+        map.addLayer(layer_IkanKerapu2020_3);
+        function pop_IkanKerapu2021_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Nama Ikan</th>\
+                        <td class="visible-with-data" id="Nama Ikan">' + (feature.properties['Nama Ikan'] !== null ? autolinker.link(feature.properties['Nama Ikan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Berat Ikan (kg)</th>\
+                        <td class="visible-with-data" id="Berat Ikan (kg)">' + (feature.properties['Berat Ikan (kg)'] !== null ? autolinker.link(feature.properties['Berat Ikan (kg)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tanggal Tangkap</th>\
+                        <td class="visible-with-data" id="Tanggal Tangkap">' + (feature.properties['Tanggal Tangkap'] !== null ? autolinker.link(feature.properties['Tanggal Tangkap'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lintang</th>\
+                        <td class="visible-with-data" id="Lintang">' + (feature.properties['Lintang'] !== null ? autolinker.link(feature.properties['Lintang'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Bujur</th>\
+                        <td class="visible-with-data" id="Bujur">' + (feature.properties['Bujur'] !== null ? autolinker.link(feature.properties['Bujur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_6</th>\
+                        <td class="visible-with-data" id="field_6">' + (feature.properties['field_6'] !== null ? autolinker.link(feature.properties['field_6'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_7</th>\
+                        <td class="visible-with-data" id="field_7">' + (feature.properties['field_7'] !== null ? autolinker.link(feature.properties['field_7'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_8</th>\
+                        <td class="visible-with-data" id="field_8">' + (feature.properties['field_8'] !== null ? autolinker.link(feature.properties['field_8'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_9</th>\
+                        <td class="visible-with-data" id="field_9">' + (feature.properties['field_9'] !== null ? autolinker.link(feature.properties['field_9'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_10</th>\
+                        <td class="visible-with-data" id="field_10">' + (feature.properties['field_10'] !== null ? autolinker.link(feature.properties['field_10'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_11</th>\
+                        <td class="visible-with-data" id="field_11">' + (feature.properties['field_11'] !== null ? autolinker.link(feature.properties['field_11'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_12</th>\
+                        <td class="visible-with-data" id="field_12">' + (feature.properties['field_12'] !== null ? autolinker.link(feature.properties['field_12'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_13</th>\
+                        <td class="visible-with-data" id="field_13">' + (feature.properties['field_13'] !== null ? autolinker.link(feature.properties['field_13'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_14</th>\
+                        <td class="visible-with-data" id="field_14">' + (feature.properties['field_14'] !== null ? autolinker.link(feature.properties['field_14'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_15</th>\
+                        <td class="visible-with-data" id="field_15">' + (feature.properties['field_15'] !== null ? autolinker.link(feature.properties['field_15'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_16</th>\
+                        <td class="visible-with-data" id="field_16">' + (feature.properties['field_16'] !== null ? autolinker.link(feature.properties['field_16'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_17</th>\
+                        <td class="visible-with-data" id="field_17">' + (feature.properties['field_17'] !== null ? autolinker.link(feature.properties['field_17'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_18</th>\
+                        <td class="visible-with-data" id="field_18">' + (feature.properties['field_18'] !== null ? autolinker.link(feature.properties['field_18'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_19</th>\
+                        <td class="visible-with-data" id="field_19">' + (feature.properties['field_19'] !== null ? autolinker.link(feature.properties['field_19'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_20</th>\
+                        <td class="visible-with-data" id="field_20">' + (feature.properties['field_20'] !== null ? autolinker.link(feature.properties['field_20'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_21</th>\
+                        <td class="visible-with-data" id="field_21">' + (feature.properties['field_21'] !== null ? autolinker.link(feature.properties['field_21'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_22</th>\
+                        <td class="visible-with-data" id="field_22">' + (feature.properties['field_22'] !== null ? autolinker.link(feature.properties['field_22'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_23</th>\
+                        <td class="visible-with-data" id="field_23">' + (feature.properties['field_23'] !== null ? autolinker.link(feature.properties['field_23'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_24</th>\
+                        <td class="visible-with-data" id="field_24">' + (feature.properties['field_24'] !== null ? autolinker.link(feature.properties['field_24'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_25</th>\
+                        <td class="visible-with-data" id="field_25">' + (feature.properties['field_25'] !== null ? autolinker.link(feature.properties['field_25'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_IkanKerapu2021_4_0() {
+            return {
+                pane: 'pane_IkanKerapu2021_4',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/IkanKerapu2021_4.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_IkanKerapu2021_4');
+        map.getPane('pane_IkanKerapu2021_4').style.zIndex = 404;
+        map.getPane('pane_IkanKerapu2021_4').style['mix-blend-mode'] = 'normal';
+        var layer_IkanKerapu2021_4 = new L.geoJson(json_IkanKerapu2021_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_IkanKerapu2021_4',
+            layerName: 'layer_IkanKerapu2021_4',
+            pane: 'pane_IkanKerapu2021_4',
+            onEachFeature: pop_IkanKerapu2021_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_IkanKerapu2021_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_IkanKerapu2021_4);
+        map.addLayer(layer_IkanKerapu2021_4);
+        function pop_IkanKerapu2022_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Nama Ikan</th>\
+                        <td class="visible-with-data" id="Nama Ikan">' + (feature.properties['Nama Ikan'] !== null ? autolinker.link(feature.properties['Nama Ikan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Berat Ikan (kg)</th>\
+                        <td class="visible-with-data" id="Berat Ikan (kg)">' + (feature.properties['Berat Ikan (kg)'] !== null ? autolinker.link(feature.properties['Berat Ikan (kg)'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tanggal Tangkap</th>\
+                        <td class="visible-with-data" id="Tanggal Tangkap">' + (feature.properties['Tanggal Tangkap'] !== null ? autolinker.link(feature.properties['Tanggal Tangkap'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lintang</th>\
+                        <td class="visible-with-data" id="Lintang">' + (feature.properties['Lintang'] !== null ? autolinker.link(feature.properties['Lintang'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Bujur</th>\
+                        <td class="visible-with-data" id="Bujur">' + (feature.properties['Bujur'] !== null ? autolinker.link(feature.properties['Bujur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['field_6'] !== null ? autolinker.link(feature.properties['field_6'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['field_7'] !== null ? autolinker.link(feature.properties['field_7'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_8</th>\
+                        <td class="visible-with-data" id="field_8">' + (feature.properties['field_8'] !== null ? autolinker.link(feature.properties['field_8'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_9</th>\
+                        <td class="visible-with-data" id="field_9">' + (feature.properties['field_9'] !== null ? autolinker.link(feature.properties['field_9'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_10</th>\
+                        <td class="visible-with-data" id="field_10">' + (feature.properties['field_10'] !== null ? autolinker.link(feature.properties['field_10'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_11</th>\
+                        <td class="visible-with-data" id="field_11">' + (feature.properties['field_11'] !== null ? autolinker.link(feature.properties['field_11'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_12</th>\
+                        <td class="visible-with-data" id="field_12">' + (feature.properties['field_12'] !== null ? autolinker.link(feature.properties['field_12'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_13</th>\
+                        <td class="visible-with-data" id="field_13">' + (feature.properties['field_13'] !== null ? autolinker.link(feature.properties['field_13'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_14</th>\
+                        <td class="visible-with-data" id="field_14">' + (feature.properties['field_14'] !== null ? autolinker.link(feature.properties['field_14'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_15</th>\
+                        <td class="visible-with-data" id="field_15">' + (feature.properties['field_15'] !== null ? autolinker.link(feature.properties['field_15'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_16</th>\
+                        <td class="visible-with-data" id="field_16">' + (feature.properties['field_16'] !== null ? autolinker.link(feature.properties['field_16'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_17</th>\
+                        <td class="visible-with-data" id="field_17">' + (feature.properties['field_17'] !== null ? autolinker.link(feature.properties['field_17'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_18</th>\
+                        <td class="visible-with-data" id="field_18">' + (feature.properties['field_18'] !== null ? autolinker.link(feature.properties['field_18'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_19</th>\
+                        <td class="visible-with-data" id="field_19">' + (feature.properties['field_19'] !== null ? autolinker.link(feature.properties['field_19'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_20</th>\
+                        <td class="visible-with-data" id="field_20">' + (feature.properties['field_20'] !== null ? autolinker.link(feature.properties['field_20'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_21</th>\
+                        <td class="visible-with-data" id="field_21">' + (feature.properties['field_21'] !== null ? autolinker.link(feature.properties['field_21'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_22</th>\
+                        <td class="visible-with-data" id="field_22">' + (feature.properties['field_22'] !== null ? autolinker.link(feature.properties['field_22'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_23</th>\
+                        <td class="visible-with-data" id="field_23">' + (feature.properties['field_23'] !== null ? autolinker.link(feature.properties['field_23'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_24</th>\
+                        <td class="visible-with-data" id="field_24">' + (feature.properties['field_24'] !== null ? autolinker.link(feature.properties['field_24'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">field_25</th>\
+                        <td class="visible-with-data" id="field_25">' + (feature.properties['field_25'] !== null ? autolinker.link(feature.properties['field_25'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_IkanKerapu2022_5_0() {
+            return {
+                pane: 'pane_IkanKerapu2022_5',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/IkanKerapu2022_5.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_IkanKerapu2022_5');
+        map.getPane('pane_IkanKerapu2022_5').style.zIndex = 405;
+        map.getPane('pane_IkanKerapu2022_5').style['mix-blend-mode'] = 'normal';
+        var layer_IkanKerapu2022_5 = new L.geoJson(json_IkanKerapu2022_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_IkanKerapu2022_5',
+            layerName: 'layer_IkanKerapu2022_5',
+            pane: 'pane_IkanKerapu2022_5',
+            onEachFeature: pop_IkanKerapu2022_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_IkanKerapu2022_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_IkanKerapu2022_5);
+        map.addLayer(layer_IkanKerapu2022_5);
+        var overlaysTree = [
+            {label: '<img src="legend/IkanKerapu2022_5.png" /> Ikan Kerapu (2022)', layer: layer_IkanKerapu2022_5},
+            {label: '<img src="legend/IkanKerapu2021_4.png" /> Ikan Kerapu (2021)', layer: layer_IkanKerapu2021_4},
+            {label: '<img src="legend/IkanKerapu2020_3.png" /> Ikan Kerapu (2020)', layer: layer_IkanKerapu2020_3},
+            {label: '<img src="legend/IkanKerapu2018_2.png" /> Ikan Kerapu (2018)', layer: layer_IkanKerapu2018_2},
+            {label: '<img src="legend/Lautan_1.png" /> Lautan', layer: layer_Lautan_1},
+            {label: '<img src="legend/Daratan_0.png" /> Daratan', layer: layer_Daratan_0},]
+        var lay = L.control.layers.tree(null, overlaysTree,{
+            //namedToggle: true,
+            //selectorBack: false,
+            //closedSymbol: '&#8862; &#x1f5c0;',
+            //openedSymbol: '&#8863; &#x1f5c1;',
+            //collapseAll: 'Collapse all',
+            //expandAll: 'Expand all',
+            collapsed: true,
+        });
+        lay.addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_IkanKerapu2020_3,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'field_6'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        </script>
+    </body>
+</html>
